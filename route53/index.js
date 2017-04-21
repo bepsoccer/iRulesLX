@@ -21,61 +21,36 @@ ilx.addMethod('route53_nodejs', function(req, response) {
 	var TTL = req.params()[3];
 	var ip = req.params()[4];
 	
-	//function to grab the hostedZoneId
-	function editZone(params, action, name,  TTL, ip, callback) {
-		route53.listHostedZonesByName(params, function(err,data) {
-			if (err) {
-			    console.log(err, err.stack);
-			}
-			if(!err) {
-				if (data.HostedZones[0].Name !== params.DNSName) {
-				    response.reply(params.DNSName + " is not a zone defined in Route53");
-				    throw new Error(params.DNSName + " is not a zone defined in Route53");
-				}
-				else {
-				    var zoneId = data.HostedZones[0].Id;
-				    return callback(zoneId);
-				}
-			}
-		});
-	}
-	//function to edit the A record
-	function editRecord(action, name,  TTL, ip, zoneId, callback) {
-		var params = {
-			"HostedZoneId": zoneId,
-			"ChangeBatch": {
-				"Changes": [
-					{
-						"Action": action,
-						"ResourceRecordSet": {
-							"Name": name,
-							"Type": "A",
-							"TTL": TTL,
-							"ResourceRecords": [
-								{
-									"Value": ip
-								}
-							]
+	route53.listHostedZonesByName(params, function(err,data) {
+		if (err) {
+		    //console.log(err, err.stack);
+		    response.reply(err);
+		}
+		else if (data.HostedZones[0].Name !== params.DNSName) {
+			response.reply(params.DNSName + " is not a zone defined in Route53");
+		}
+		else {
+		    var zoneId = data.HostedZones[0].Id;
+		    var recParams = {
+				"HostedZoneId": zoneId,
+				"ChangeBatch": {
+					"Changes": [
+						{
+							"Action": action,
+							"ResourceRecordSet": {
+								"Name": name,
+								"Type": "A",
+								"TTL": TTL,
+								"ResourceRecords": [
+									{
+										"Value": ip
+									}
+								]
+							}
 						}
-					}
-				]
-			}
-		};
-
-		//edit records using aws sdk
-	    route53.changeResourceRecordSets(params, function(err,data) {
-		    callback(err,data);
-	    });
-
-	}
-
-    editZone(params, action, name,  TTL, ip, function(zoneId) {
-		editRecord(action, name, TTL, ip, zoneId, function(err,data) {
-			if (err) {response.reply(err);}
-			else {
-			    if (data.ChangeInfo.Status == "PENDING") {response.reply("Record is being updated");}
-			    else {response.reply(data);}
-			}
-		});
+					]
+				}
+			};
+		}
 	});
 });
