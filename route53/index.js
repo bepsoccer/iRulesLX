@@ -51,6 +51,12 @@ ilx.addMethod('route53_nodejs', function(req, response) {
 					]
 				}
 			};
+			//edit records using aws sdk
+			route53.changeResourceRecordSets(params, function(err,data) {
+				if (err) {response.reply(err);}
+				else if (data.ChangeInfo.Status === "PENDING") {response.reply("Record is being updated");}
+			    else {response.reply(data);}
+			});
 		}
 	});
 });
