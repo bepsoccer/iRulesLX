@@ -4,7 +4,7 @@
        "For more information please see www.npmjs.org/doc/package.json.html. "
   ],
   "name": "editRoute53Record",
-  "version": "1.0.0",
+  "version": "2.0.2",
   "main": "index.js",
   "description": "A custom iRulesLX extension for BIG-IP",
   "author": "Brad Parker",
