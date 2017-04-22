@@ -24,7 +24,7 @@ ilx.addMethod('route53_nodejs', function(req, response) {
 	route53.listHostedZonesByName(params, function(err,data) {
 		if (err) {
 		    //console.log(err, err.stack);
-		    response.reply(err);
+		    response.reply(err.toString());
 		}
 		else if (data.HostedZones[0].Name !== params.DNSName) {
 			response.reply(params.DNSName + " is not a zone defined in Route53");
@@ -52,8 +52,8 @@ ilx.addMethod('route53_nodejs', function(req, response) {
 				}
 			};
 			//edit records using aws sdk
-			route53.changeResourceRecordSets(params, function(err,data) {
-				if (err) {response.reply(err);}
+			route53.changeResourceRecordSets(recParams, function(err,data) {
+				if (err) {response.reply(err.toString());}
 				else if (data.ChangeInfo.Status === "PENDING") {response.reply("Record is being updated");}
 			    else {response.reply(data);}
 			});
