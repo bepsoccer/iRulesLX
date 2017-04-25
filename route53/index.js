@@ -1,16 +1,16 @@
 var AWS = require('aws-sdk');
 var f5 = require('f5-nodejs'); 
-// AWS Config
-AWS.config.update({accessKeyId: "<your access key>", secretAccessKey: "<your secret>", region: "us-west-2"});
-// get the Route53 library
+/* AWS Config */
+//AWS.config.update({accessKeyId: "<your access key>", secretAccessKey: "<your secret>"});
+/* get the Route53 library */
 var route53 = new AWS.Route53(); 
-// Create a new rpc server for listening to TCL iRule calls. 
+/* Create a new rpc server for listening to TCL iRule calls. */
 var ilx = new f5.ILXServer();  
   
-// Start listening for ILX::call and ILX::notify events.  
+/* Start listening for ILX::call and ILX::notify events. */
 ilx.listen();  
 
-// Add a method and expect DNSName, action, name, TTL, and ip parameters and reply with response  
+/* Add a method and expect DNSName, action, name, TTL, and ip parameters and reply with response */
 ilx.addMethod('route53_nodejs', function(req, response) {
 	var DNSName = req.params()[0];
 	var params = {
@@ -51,7 +51,7 @@ ilx.addMethod('route53_nodejs', function(req, response) {
 					]
 				}
 			};
-			//edit records using aws sdk
+			/* edit records using aws sdk */
 			route53.changeResourceRecordSets(recParams, function(err,data) {
 				if (err) {response.reply(err.toString());}
 				else if (data.ChangeInfo.Status === "PENDING") {response.reply("Record is being updated");}
