@@ -37,7 +37,3 @@ ehthumbs.db
 Thumbs.db
 
 node_modules
-
-# Lambda Environment Variables #
-#######################
-env.json
