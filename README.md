@@ -2,4 +2,4 @@
 Just a repo to store iRules LX solutions for others to use
 
 # How to use
-[![](images/newplugin.png)]
+![](images/newplugin.png)
