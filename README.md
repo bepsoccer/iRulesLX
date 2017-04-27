@@ -23,5 +23,5 @@ add a new iRules LX plugin
 Add needed node modules via ssh, i.e.
 ```
 config # cd /var/ilx/workspaces/Common/myNewWorkSpace/extensions/route53/
-route53 # npm install validator --save
+route53 # npm install aws-sdk --save
 ```
