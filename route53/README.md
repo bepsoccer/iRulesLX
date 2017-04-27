@@ -14,3 +14,8 @@ and
 set name "<your hostname>"
 ```
 need to be set.  This is up to you how you want to set them.
+
+```
+set RPC_HANDLE [ILX::init <name of your extension>]
+```
+The name of your extension will need to match what's in the [editRecord.tcl](editRecord.tcl).  It's set to route53 in the current code.
